@@ -57,14 +57,14 @@ hr {
 
 label {
 	display: block;
-	margin-bottom: 3px;
+	margin-block-end: 3px;
 	font-weight: bold;
 }
 
 #unicodeWarn {
 	display: none;
 	text-align: center;
-	margin-top: 5px;
+	margin-block-start: 5px;
 	background-color: coral;
 	color: white;
 	border-radius: 3px;
@@ -88,6 +88,14 @@ label {
 }
 
 .arrow>.down {
+	display: none;
+}
+
+.arrow.copy>.swap {
+	display: none;
+}
+
+.arrow.swap>.copy {
 	display: none;
 }
 
@@ -124,4 +132,14 @@ label {
 #actionlog {
 	z-index: 3;
 	top: .7rem;
+}
+
+label:has(input[type="checkbox"]) {
+	font-weight: normal;
+	margin-inline-start: 10px;
+}
+
+label>input[type="checkbox"] {
+	margin-inline-end: 3px;
+	vertical-align: baseline;
 }

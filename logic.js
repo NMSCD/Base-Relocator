@@ -14,7 +14,7 @@
 	Array.from(children).at(-1).insertAdjacentHTML('beforebegin', buildColumn(directions[1]));
 })();
 
-// has this structure: { bases: {}, newBases: {} }
+// has this structure: { bases: {}, newBases: {}, copy: Bool }
 const baseData = new Object;
 
 function readJSON(JSONInput) {
@@ -74,7 +74,7 @@ function swapBases(button) {
 	button.style.pointerEvents = 'none';
 	const buttonText = button.innerText;
 	const selectedElements = document.getElementsByClassName('clicked');
-	if (selectedElements.length != 2 || selectedElements[0].dataset.id == selectedElements[1].dataset.id) {
+	if (selectedElements.length != 2 || !selectedElements[0] || !selectedElements[1] || selectedElements[0]?.dataset?.id == selectedElements[1]?.dataset?.id) {
 		button.classList.remove('is-primary');
 		button.classList.add('is-danger');
 		button.innerText = 'Failed!';
@@ -93,11 +93,15 @@ function swapBases(button) {
 	}
 	const oldBaseObjects = structuredClone(newBases[ids[0]].Objects);
 	const newBaseObjects = structuredClone(newBases[ids[1]].Objects);
-	newBases[ids[0]].Objects = newBaseObjects;
 	newBases[ids[1]].Objects = oldBaseObjects;
+	if (!baseData.copy) newBases[ids[0]].Objects = newBaseObjects;
 
 	button.innerText = 'Swapped!';
-	addToLog(`Swapped "${selectedElements[0].innerText}" and "${selectedElements[1].innerText}"`);
+	if (baseData.copy) {
+		addToLog(`Copied "${selectedElements[0].innerText}" to "${selectedElements[1].innerText}"`);
+	} else {
+		addToLog(`Swapped "${selectedElements[0].innerText}" and "${selectedElements[1].innerText}"`);
+	}
 	setTimeout(() => {
 		button.innerText = buttonText;
 		button.style.pointerEvents = '';
@@ -161,3 +165,13 @@ function reset() {
 	baseData.newBases = structuredClone(baseData.bases);
 	addToLog('Undid Edits');
 }
+
+function checkboxChange(bool) {
+	baseData.copy = bool;
+	const wrapper = document.querySelector('#output .columns .arrow');
+	wrapper.classList.toggle('copy', bool);
+	wrapper.classList.toggle('swap', !bool);
+
+	const swapButton = document.getElementById('swap');
+	swapButton.innerText = bool ? 'Copy Selected Base' : 'Swap Selected Bases';
+}  
