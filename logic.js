@@ -15,7 +15,7 @@
 })();
 
 
-let bases, newBases, buttonPress;
+const baseData = new Object;
 
 function readJSON(JSONInput) {
 	const JSONString = JSONInput.value;
@@ -26,11 +26,14 @@ function readJSON(JSONInput) {
 	}
 
 	if (!JSONString) return;
-	bases = JSON.parse(JSONString);
-	listBuilder(bases);
+	delete baseData.bases;
+	baseData.bases = JSON.parse(JSONString);
+	Object.freeze(baseData.bases);		// freezing the object so we can be sure it can't been tampered with
+	listBuilder();
 }
 
-function listBuilder(bases) {
+function listBuilder() {
+	const bases = baseData.bases
 	const elements = new Array;
 	for (let i = 0; i < bases.length; i++) {
 		const base = bases[i];
@@ -39,7 +42,10 @@ function listBuilder(bases) {
 		const element = buildListItem(id, name);
 		elements.push(element);
 	}
-	document.getElementsByClassName('bases').forEach(element => element.innerHTML = elements.join(''));
+	const baseElements = document.getElementsByClassName('bases');
+	for (const element of baseElements) {
+		element.innerHTML = elements.join('');
+	}
 }
 
 function buildListItem(id, name) {
@@ -48,8 +54,17 @@ function buildListItem(id, name) {
 	const element = document.createElement(tagName);
 	element.id = id;
 	element.innerText = name;
+	element.setAttribute('onclick', 'highlightBase(this)');
 
 	return element.outerHTML;
+}
+
+function highlightBase(element) {
+	const baseList = element.closest('.bases');
+	const prev = baseList.querySelector('.clicked')
+	prev?.classList.remove('clicked');
+	if (prev == element) return;
+	element.classList.add('clicked');
 }
 
 function getDivOrder() {
@@ -68,13 +83,12 @@ function outputJSON() {
 	for (let i = 0; i < bases.length; i++) {
 		newArray[i] = bases[divOrder[i]];
 	}
-	newBases = newArray;
+	baseData.newBases = newArray;
 }
 
 function copyButton(input) {
 	if (buttonPress) return;
 	const buttonText = input.innerHTML;
-	buttonPress = true;
 	try { outputJSON(); } catch (error) {
 		input.classList.remove('is-primary');
 		input.classList.add('is-danger');
@@ -83,18 +97,16 @@ function copyButton(input) {
 			input.classList.remove('is-danger');
 			input.classList.add('is-primary');
 			input.innerHTML = buttonText;
-			buttonPress = false;
 		}, 1500);
 		console.error(error);
 		return;
 	}
-	const copyTextContent = JSON.stringify(newBases, null, '	');		// this applies formatting and uses one tab as indent character
+	const copyTextContent = JSON.stringify(baseData.newBases, null, '	');		// this applies formatting and uses one tab as indent character
 	navigator.clipboard.writeText(copyTextContent);
 
 	input.innerHTML = 'Copied!';
 	setTimeout(() => {
 		input.innerHTML = buttonText;
-		buttonPress = false;
 	}, 1500)
 }
 
@@ -122,9 +134,11 @@ function addToLog(text) {
 }
 
 function reset() {
+	if (!baseData.bases) return;
 	const baseElements = document.getElementsByClassName('bases');
 	for (const element of baseElements) {
 		element.innerHTML = '';
 	}
+	listBuilder();
 	addToLog('Undid Edits');
 }

@@ -32,8 +32,8 @@ hr {
 	border-radius: 5px;
 }
 
-.listItem[data-clicked="true"] {
-	background-color: green;
+.bases>div.clicked {
+	background-color: lightgreen;
 }
 
 .bases>div {
@@ -43,6 +43,7 @@ hr {
 	cursor: pointer;
 	-webkit-user-select: none;
 	user-select: none;
+	background-color: lightgray;
 }
 
 .bases>span {
