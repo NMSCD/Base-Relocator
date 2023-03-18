@@ -3,9 +3,7 @@
 	function buildColumn(direction) {
 		const template = `
 		<div class="column" id="${direction}">
-			<div class="input-wrapper">
-				<input type="text" placeholder="🔎 Search" class="input" oninput="filterList(this)">
-			</div>
+			<input type="text" placeholder="🔎 Search" class="input" oninput="filterList(this)">
 			<div class="bases"></div>
 		</div>`;
 		return template;
@@ -21,11 +19,9 @@ const baseData = new Object;
 
 function readJSON(JSONInput) {
 	const JSONString = JSONInput.value;
-	if (JSONString.includes('\\u')) {
-		document.getElementById('unicodeWarn').style.display = 'block';
-	} else {
-		document.getElementById('unicodeWarn').style.display = '';
-	}
+	const unicodeWarn = document.getElementById('unicodeWarn');
+	const isUnicodePresent = JSONString.includes('\\u');
+	unicodeWarn.style.display = isUnicodePresent ? 'block' : '';
 
 	if (!JSONString) return;
 	delete baseData.bases;
@@ -113,7 +109,7 @@ function copyButton(input) {
 
 function filterList(inputElement) {
 	const searchText = inputElement.value.trim().toLowerCase();
-	const baseList = inputElement.closest('.column').querySelector('.bases').children;
+	const baseList = inputElement.nextElementSibling.children;
 
 	for (const base of baseList) {
 		const baseName = base.innerText.toLowerCase();
@@ -124,7 +120,6 @@ function filterList(inputElement) {
 		}
 	}
 }
-
 
 function addToLog(text) {
 	const logElement = document.getElementById('actionlog');

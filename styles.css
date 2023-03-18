@@ -70,15 +70,8 @@ label {
 	border-radius: 3px;
 }
 
-.input-wrapper {
-	position: sticky;
-	top: 3.8rem;
-	background-color: white;
-	margin-block-end: .5rem;
-}
-
 .input {
-	margin-block: .5rem;
+	margin-block: 1rem;
 }
 
 .arrow {
