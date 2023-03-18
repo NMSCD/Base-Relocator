@@ -76,13 +76,14 @@ label {
 
 .arrow {
 	font-weight: bold;
-	font-size: 2rem;
+	font-size: 3rem;
 	text-align: center;
+	max-width: 10%;
 }
 
 .arrow>.right {
 	position: sticky;
-	top: 50dvh;
+	top: calc(50dvh - 2rem);
 	margin-block-start: 5rem;
 }
 
@@ -96,9 +97,14 @@ label {
 	}
 
 	.arrow>.down {
+		display: unset;
+	}
+
+	.arrow {
 		display: flex;
 		place-items: center;
 		justify-content: center;
+		min-width: 100%;
 	}
 }
 
