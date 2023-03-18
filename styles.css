@@ -1,26 +1,27 @@
 @import "https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css";
 
-* {
+html,
+body {
 	font-family: sans-serif;
 }
 
-h1 {
+.title {
 	text-align: center;
 }
 
 @media only screen and (max-width: 1023px) {
 	.container {
-		margin: 0 1em;
+		margin-inline: 1rem;
 	}
 }
 
 nav {
-	margin: 1em 0;
+	margin: 1rem 0;
 }
 
 .textarea {
 	min-width: 100%;
-	min-height: 10em;
+	min-height: 10rem;
 	resize: vertical;
 	padding: 0 5px;
 	margin-block-end: .5rem;
@@ -31,68 +32,20 @@ hr {
 	border-radius: 5px;
 }
 
-#bases>div {
-	padding: 1em;
-	margin: 0.3em;
+.listItem[data-clicked="true"] {
+	background-color: green;
+}
+
+.bases>div {
+	padding: 1rem;
+	margin: 0.3rem;
 	border-radius: 5px;
-	cursor: grab;
+	cursor: pointer;
 	-webkit-user-select: none;
 	user-select: none;
 }
 
-#bases>div:nth-of-type(9n),
-#bases>div:nth-of-type(9n-1),
-#bases>div:nth-of-type(9n-2) {
-	border-bottom: 2px solid black;
-	margin-bottom: 1em;
-}
-
-#bases>div:nth-of-type(9n),
-#bases>div:nth-of-type(9n-1),
-#bases>div:nth-of-type(9n-2),
-#bases>div:nth-of-type(9n-3),
-#bases>div:nth-of-type(9n-4),
-#bases>div:nth-of-type(9n-5),
-#bases>div:nth-of-type(9n-6),
-#bases>div:nth-of-type(9n-7),
-#bases>div:nth-of-type(9n-8) {
-	background-color: hsl(0, 0%, 90%);
-}
-
-#bases>div:nth-of-type(18n),
-#bases>div:nth-of-type(18n-1),
-#bases>div:nth-of-type(18n-2),
-#bases>div:nth-of-type(18n-3),
-#bases>div:nth-of-type(18n-4),
-#bases>div:nth-of-type(18n-5),
-#bases>div:nth-of-type(18n-6),
-#bases>div:nth-of-type(18n-7),
-#bases>div:nth-of-type(18n-8) {
-	background-color: hsl(0, 0%, 85%);
-}
-
-#bases>div:nth-of-type(3n-2) {
-	margin-left: 0;
-}
-
-#bases>div:nth-of-type(3n) {
-	margin-right: 0;
-}
-
-#bases>div:not(.immovable):hover {
-	background-color: hsl(0, 0%, 77%);
-}
-
-#bases>div.sortable-chosen {
-	background-color: hsl(0, 0%, 70%) !important;
-	cursor: grabbing;
-}
-
-#bases>div.sortable-ghost {
-	z-index: 2;
-}
-
-#bases>span {
+.bases>span {
 	display: none;
 }
 
@@ -101,30 +54,10 @@ hr {
 }
  */
 
-#bases {
-	display: grid;
-	grid-template-columns: repeat(3, 1fr);
-	margin: 0 0.3em;
-}
-
 label {
 	display: block;
 	margin-bottom: 3px;
 	font-weight: bold;
-}
-
-#output p {
-	display: inline-block;
-	margin-right: 0.3em;
-	text-align: right;
-
-}
-
-.output-top-bar {
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-	flex-wrap: wrap;
 }
 
 #unicodeWarn {
@@ -136,35 +69,8 @@ label {
 	border-radius: 3px;
 }
 
-#checkboxes {
-	align-self: center;
-}
-
-#checkboxes>div {
-	text-align: center;
-	display: flex;
-	justify-content: space-between;
-	margin: 0 4em;
-}
-
-.immovable {
-	cursor: not-allowed !important;
-	z-index: -1;
-	color: gray;
-}
-
 .input {
 	margin-block: 1rem;
-}
-
-.listItem {
-	background-color: lightgray;
-	border-radius: 4px;
-	padding: .5rem;
-}
-
-.listItem[data-clicked="true"] {
-	background-color: green;
 }
 
 .arrow {
@@ -191,4 +97,8 @@ label {
 	.arrow.down {
 		display: flex;
 	}
+}
+
+.logItem {
+	margin-block: .5rem;
 }

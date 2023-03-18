@@ -9,11 +9,7 @@
 	<script src="./logic.js" defer></script>
 	<script>
 		window.onload = () => {
-			getBases(document.getElementById('JSONinput'));
-			document.querySelectorAll('#checkboxes input').forEach(e => {
-				extraItem(e);
-			})
-
+			readJSON(document.getElementById('JSONinput'));
 		}
 	</script>
 </head>
@@ -28,7 +24,7 @@
 			<div id="input">
 				<div>
 					<label for="JSONinput">Copy your PersistentPlayerBases JSON section here:</label>
-					<textarea id="JSONinput" oninput="getBases(this)" class="textarea"></textarea>
+					<textarea id="JSONinput" oninput="readJSON(this)" class="textarea"></textarea>
 				</div>
 				<p id="unicodeWarn">
 					Potential unicode characters detected in JSON. This could lead to basenames showing up weirdly in
@@ -53,24 +49,13 @@
 						Selected Bases</button>
 					<button class="button is-primary is-outlined" id="copy" type="button"
 						onclick="copyButton(this)">Copy Modified JSON</button>
-					<button id="reset" class="button is-warning" type="button">Undo Edits</button>
+					<button id="reset" class="button is-warning" type="button" onclick="reset()">Undo Edits</button>
 				</div>
 				<div class="columns">
-					<div class="column" id="left">
-						<input type="text" placeholder="🔎 Search" class="input">
-						<div id="basesLeft">
-							<div class="listItem">Left</div>
-
-						</div>
-					</div>
 					<div class="column arrow right">&rarr;</div>
 					<div class="column arrow down">&darr;</div>
-					<div class="column" id="right">
-						<input type="text" placeholder="🔎 Search" class="input">
-						<div id="basesRight">
-							<div class="listItem">Right</div>
-
-						</div>
+					<div class="column" id="actionlog">
+						<h2 class="title is-5">Log</h3>
 					</div>
 				</div>
 			</div>

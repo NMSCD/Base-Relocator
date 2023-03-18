@@ -1,6 +1,23 @@
+(() => {
+	const directions = ['left', 'right'];
+	function buildColumn(direction) {
+		const template = `
+		<div class="column" id="${direction}">
+			<input type="text" placeholder="🔎 Search" class="input" oninput="filterList(this)">
+			<div class="bases"></div>
+		</div>`;
+		return template;
+	}
+	const outputElement = document.querySelector('#output .columns');
+	const children = outputElement.children;
+	outputElement.insertAdjacentHTML('afterbegin', buildColumn(directions[0]));
+	Array.from(children).at(-1).insertAdjacentHTML('beforebegin', buildColumn(directions[1]));
+})();
+
+
 let bases, newBases, buttonPress;
 
-function getBases(JSONInput) {
+function readJSON(JSONInput) {
 	const JSONString = JSONInput.value;
 	if (JSONString.includes('\\u')) {
 		document.getElementById('unicodeWarn').style.display = 'block';
@@ -9,53 +26,30 @@ function getBases(JSONInput) {
 	}
 
 	if (!JSONString) return;
-	bases = JSON.parse(JSONString)
+	bases = JSON.parse(JSONString);
+	listBuilder(bases);
+}
 
+function listBuilder(bases) {
 	const elements = new Array;
 	for (let i = 0; i < bases.length; i++) {
 		const base = bases[i];
 		const id = i;
 		const name = base.Name;
-		if (base.BaseType.PersistentBaseTypes == 'FreighterBase') elements.unshift(buildImmovable('Freighterbase'));
-		const element = buildElement(id, name);
+		const element = buildListItem(id, name);
 		elements.push(element);
 	}
-	document.getElementById('bases').innerHTML = elements.join('');
-	document.querySelectorAll('#checkboxes input').forEach(e => {
-		extraItem(e);
-	})
+	document.getElementsByClassName('bases').forEach(element => element.innerHTML = elements.join(''));
 }
 
-function buildImmovable(name) {
-	const immovable = document.createElement('div');
-	immovable.id = name;
-	immovable.innerText = name;
-	immovable.classList.add('immovable');
-	return immovable.outerHTML;
-}
-
-function buildElement(id, name) {
+function buildListItem(id, name) {
 	const tagName = name ? 'div' : 'span';
 
 	const element = document.createElement(tagName);
 	element.id = id;
 	element.innerText = name;
 
-	const output = element.outerHTML;
-	return output;
-}
-
-function extraItem(inputElement) {
-	const type = inputElement.value;
-	if (inputElement.checked) {
-		if (document.getElementById(type)) return;
-		const element = buildImmovable(type);
-		document.getElementById('bases').insertAdjacentHTML('afterbegin', element);
-	} else {
-		const element = document.querySelector(`#bases > #${type}`);
-		if (!element) return;
-		document.getElementById('bases').removeChild(element);
-	}
+	return element.outerHTML;
 }
 
 function getDivOrder() {
@@ -102,4 +96,35 @@ function copyButton(input) {
 		input.innerHTML = buttonText;
 		buttonPress = false;
 	}, 1500)
+}
+
+function filterList(inputElement) {
+	const searchText = inputElement.value.trim().toLowerCase();
+	const baseList = inputElement.nextElementSibling.children;
+
+	for (const base of baseList) {
+		const baseName = base.innerText.toLowerCase();
+		if (!searchText || baseName.includes(searchText)) {
+			base.style.display = '';
+		} else {
+			base.style.display = 'none';
+		}
+	}
+}
+
+
+function addToLog(text) {
+	const logElement = document.getElementById('actionlog');
+	const div = document.createElement('div');
+	div.innerText = text;
+	div.classList.add('logItem');
+	logElement.appendChild(div);
+}
+
+function reset() {
+	const baseElements = document.getElementsByClassName('bases');
+	for (const element of baseElements) {
+		element.innerHTML = '';
+	}
+	addToLog('Undid Edits');
 }
