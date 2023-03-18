@@ -3,7 +3,9 @@
 	function buildColumn(direction) {
 		const template = `
 		<div class="column" id="${direction}">
-			<input type="text" placeholder="🔎 Search" class="input" oninput="filterList(this)">
+			<div class="input-wrapper">
+				<input type="text" placeholder="🔎 Search" class="input" oninput="filterList(this)">
+			</div>
 			<div class="bases"></div>
 		</div>`;
 		return template;
@@ -63,8 +65,7 @@ function highlightBase(element) {
 	const baseList = element.closest('.bases');
 	const prev = baseList.querySelector('.clicked')
 	prev?.classList.remove('clicked');
-	if (prev == element) return;
-	element.classList.add('clicked');
+	if (prev != element) element.classList.add('clicked');
 }
 
 function getDivOrder() {
@@ -112,7 +113,7 @@ function copyButton(input) {
 
 function filterList(inputElement) {
 	const searchText = inputElement.value.trim().toLowerCase();
-	const baseList = inputElement.nextElementSibling.children;
+	const baseList = inputElement.closest('.column').querySelector('.bases').children;
 
 	for (const base of baseList) {
 		const baseName = base.innerText.toLowerCase();

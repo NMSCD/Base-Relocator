@@ -38,7 +38,7 @@ hr {
 
 .bases>div {
 	padding: 1rem;
-	margin: 0.3rem;
+	margin-block: 0.3rem;
 	border-radius: 5px;
 	cursor: pointer;
 	-webkit-user-select: none;
@@ -70,36 +70,59 @@ label {
 	border-radius: 3px;
 }
 
+.input-wrapper {
+	position: sticky;
+	top: 3.8rem;
+	background-color: white;
+	margin-block-end: .5rem;
+}
+
 .input {
-	margin-block: 1rem;
+	margin-block: .5rem;
 }
 
 .arrow {
 	font-weight: bold;
 	font-size: 2rem;
-	display: flex;
-	justify-content: center;
-	place-items: center;
+	text-align: center;
 }
 
-.arrow.right {
-	margin-top: 4rem;
+.arrow>.right {
+	position: sticky;
+	top: 50dvh;
+	margin-block-start: 5rem;
 }
 
-.arrow.down {
+.arrow>.down {
 	display: none;
 }
 
 @media screen and (max-width:768px) {
-	.arrow.right {
+	.arrow>.right {
 		display: none;
 	}
 
-	.arrow.down {
+	.arrow>.down {
 		display: flex;
+		place-items: center;
+		justify-content: center;
 	}
 }
 
 .logItem {
 	margin-block: .5rem;
+}
+
+.buttons,
+#actionlog {
+	position: sticky;
+	padding-block-start: 1rem;
+	top: 0;
+	z-index: 2;
+	background-color: white;
+}
+
+#actionlog {
+	z-index: 3;
+	top: .7rem;
 }
