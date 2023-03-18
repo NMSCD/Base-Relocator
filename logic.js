@@ -14,23 +14,29 @@
 	Array.from(children).at(-1).insertAdjacentHTML('beforebegin', buildColumn(directions[1]));
 })();
 
-
-let bases, newBases, buttonPress;
+// has this structure: { bases: {}, newBases: {} }
+const baseData = new Object;
 
 function readJSON(JSONInput) {
 	const JSONString = JSONInput.value;
-	if (JSONString.includes('\\u')) {
-		document.getElementById('unicodeWarn').style.display = 'block';
-	} else {
-		document.getElementById('unicodeWarn').style.display = '';
-	}
+	const unicodeWarn = document.getElementById('unicodeWarn');
+	const isUnicodePresent = JSONString.includes('\\u');
+	unicodeWarn.style.display = isUnicodePresent ? 'block' : '';
 
 	if (!JSONString) return;
-	bases = JSON.parse(JSONString);
-	listBuilder(bases);
+	delete baseData.bases;
+	delete baseData.newBases;
+	baseData.bases = JSON.parse(JSONString);
+	Object.freeze(baseData.bases);		// freezing the object so we can be sure it can't been tampered with
+	listBuilder();
 }
 
-function listBuilder(bases) {
+function listBuilder() {
+	const baseElements = document.getElementsByClassName('bases');
+	for (const element of baseElements) {
+		element.style.willChange = 'contents';
+	}
+	const bases = baseData.bases
 	const elements = new Array;
 	for (let i = 0; i < bases.length; i++) {
 		const base = bases[i];
@@ -39,62 +45,87 @@ function listBuilder(bases) {
 		const element = buildListItem(id, name);
 		elements.push(element);
 	}
-	document.getElementsByClassName('bases').forEach(element => element.innerHTML = elements.join(''));
+	const combinedHTML = elements.join('');
+	for (const element of baseElements) {
+		element.innerHTML = combinedHTML;
+		element.style.willChange = '';
+	}
 }
 
 function buildListItem(id, name) {
 	const tagName = name ? 'div' : 'span';
 
 	const element = document.createElement(tagName);
-	element.id = id;
+	element.dataset.id = id;
 	element.innerText = name;
+	element.setAttribute('onclick', 'highlightBase(this)');
 
 	return element.outerHTML;
 }
 
-function getDivOrder() {
-	const divIds = new Array;
-	const divs = Array.from(document.getElementById('bases').children);
-	for (const div of divs) {
-		if (isNaN(div.id)) continue;
-		divIds.push(parseInt(div.id));
-	}
-	return divIds;
+function highlightBase(element) {
+	const baseList = element.closest('.bases');
+	const prev = baseList.querySelector('.clicked')
+	prev?.classList.remove('clicked');
+	if (prev != element) element.classList.add('clicked');
 }
 
-function outputJSON() {
-	const newArray = new Array;
-	const divOrder = getDivOrder();
-	for (let i = 0; i < bases.length; i++) {
-		newArray[i] = bases[divOrder[i]];
-	}
-	newBases = newArray;
-}
-
-function copyButton(input) {
-	if (buttonPress) return;
-	const buttonText = input.innerHTML;
-	buttonPress = true;
-	try { outputJSON(); } catch (error) {
-		input.classList.remove('is-primary');
-		input.classList.add('is-danger');
-		input.innerHTML = 'Failed!';
+function swapBases(button) {
+	button.style.pointerEvents = 'none';
+	const buttonText = button.innerText;
+	const selectedElements = document.getElementsByClassName('clicked');
+	if (selectedElements.length != 2 || selectedElements[0].dataset.id == selectedElements[1].dataset.id) {
+		button.classList.remove('is-primary');
+		button.classList.add('is-danger');
+		button.innerText = 'Failed!';
 		setTimeout(() => {
-			input.classList.remove('is-danger');
-			input.classList.add('is-primary');
-			input.innerHTML = buttonText;
-			buttonPress = false;
+			button.classList.remove('is-danger');
+			button.classList.add('is-primary');
+			button.innerText = buttonText;
+			button.style.pointerEvents = '';
 		}, 1500);
-		console.error(error);
 		return;
 	}
-	const copyTextContent = JSON.stringify(newBases, null, '	');		// this applies formatting and uses one tab as indent character
-	navigator.clipboard.writeText(copyTextContent);
+	const newBases = baseData.newBases ??= structuredClone(baseData.bases);
+	const ids = new Array;
+	for (const element of selectedElements) {
+		ids.push(element.dataset.id);
+	}
+	const oldBaseObjects = structuredClone(newBases[ids[0]].Objects);
+	const newBaseObjects = structuredClone(newBases[ids[1]].Objects);
+	newBases[ids[0]].Objects = newBaseObjects;
+	newBases[ids[1]].Objects = oldBaseObjects;
 
-	input.innerHTML = 'Copied!';
+	button.innerText = 'Swapped!';
+	addToLog(`Swapped "${selectedElements[0].innerText}" and "${selectedElements[1].innerText}"`);
 	setTimeout(() => {
-		input.innerHTML = buttonText;
-		buttonPress = false;
+		button.innerText = buttonText;
+		button.style.pointerEvents = '';
+	}, 1500)
+}
+
+function copyButton(button) {
+	button.style.pointerEvents = 'none';
+	const buttonText = button.innerText;
+	if (!baseData.newBases) {
+		button.classList.remove('is-primary');
+		button.classList.add('is-danger');
+		button.innerText = 'Failed!';
+		setTimeout(() => {
+			button.classList.remove('is-danger');
+			button.classList.add('is-primary');
+			button.innerText = buttonText;
+			button.style.pointerEvents = '';
+		}, 1500);
+		return;
+	}
+	const copyTextContent = JSON.stringify(baseData.newBases, null, '	');		// this applies formatting and uses one tab as indent character
+	navigator.clipboard.writeText(copyTextContent);
+	button.innerText = 'Copied!';
+
+	setTimeout(() => {
+		button.innerText = buttonText;
+		button.style.pointerEvents = '';
 	}, 1500)
 }
 
@@ -112,7 +143,6 @@ function filterList(inputElement) {
 	}
 }
 
-
 function addToLog(text) {
 	const logElement = document.getElementById('actionlog');
 	const div = document.createElement('div');
@@ -122,9 +152,12 @@ function addToLog(text) {
 }
 
 function reset() {
+	if (!baseData.bases) return;
 	const baseElements = document.getElementsByClassName('bases');
 	for (const element of baseElements) {
 		element.innerHTML = '';
 	}
+	listBuilder();
+	baseData.newBases = structuredClone(baseData.bases);
 	addToLog('Undid Edits');
 }

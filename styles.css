@@ -32,17 +32,18 @@ hr {
 	border-radius: 5px;
 }
 
-.listItem[data-clicked="true"] {
-	background-color: green;
+.bases>div.clicked {
+	background-color: lightgreen;
 }
 
 .bases>div {
 	padding: 1rem;
-	margin: 0.3rem;
+	margin-block: 0.3rem;
 	border-radius: 5px;
 	cursor: pointer;
 	-webkit-user-select: none;
 	user-select: none;
+	background-color: lightgray;
 }
 
 .bases>span {
@@ -75,30 +76,52 @@ label {
 
 .arrow {
 	font-weight: bold;
-	font-size: 2rem;
-	display: flex;
-	justify-content: center;
-	place-items: center;
+	font-size: 3rem;
+	text-align: center;
+	max-width: 10%;
 }
 
-.arrow.right {
-	margin-top: 4rem;
+.arrow>.right {
+	position: sticky;
+	top: calc(50dvh - 2rem);
+	margin-block-start: 5rem;
 }
 
-.arrow.down {
+.arrow>.down {
 	display: none;
 }
 
 @media screen and (max-width:768px) {
-	.arrow.right {
+	.arrow>.right {
 		display: none;
 	}
 
-	.arrow.down {
+	.arrow>.down {
+		display: unset;
+	}
+
+	.arrow {
 		display: flex;
+		place-items: center;
+		justify-content: center;
+		min-width: 100%;
 	}
 }
 
 .logItem {
 	margin-block: .5rem;
+}
+
+.buttons,
+#actionlog {
+	position: sticky;
+	padding-block-start: 1rem;
+	top: 0;
+	z-index: 2;
+	background-color: white;
+}
+
+#actionlog {
+	z-index: 3;
+	top: .7rem;
 }
