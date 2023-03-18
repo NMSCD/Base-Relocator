@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Base Relocator</title>
+	<link rel="stylesheet" href="./styles.css">
+	<script src="./logic.js" defer></script>
+	<script>
+		window.onload = () => {
+			getBases(document.getElementById('JSONinput'));
+			document.querySelectorAll('#checkboxes input').forEach(e => {
+				extraItem(e);
+			})
+
+		}
+	</script>
+</head>
+
+<body>
+	<div class="container">
+		<nav>
+			<a href=".." title="Other pages">&larr; View other pages</a>
+		</nav>
+		<main>
+			<h1 class="title is-3">Base Relocator</h1>
+			<div id="input">
+				<div>
+					<label for="JSONinput">Copy your PersistentPlayerBases JSON section here:</label>
+					<textarea id="JSONinput" oninput="getBases(this)" class="textarea"></textarea>
+				</div>
+				<p id="unicodeWarn">
+					Potential unicode characters detected in JSON. This could lead to basenames showing up weirdly in
+					this list and in the game.
+					<br>
+					To resolve this issue, use the NomNom save editor (linked below) to
+					copy the JSON.
+				</p>
+				<p>
+					It is recommended to use the <a href="https://github.com/zencq/NomNom/releases" target="_blank"
+						rel="noopener noreferrer" title="NomNom save editor">NomNom save editor</a> over the Java
+					NMS Save Editor for copying the JSON out and into the save.
+					<br>
+					This is due to the Java Save Editor having problems with certain special characters which could
+					result in weird behaviour.
+				</p>
+			</div>
+			<hr>
+			<div id="output">
+				<div class="buttons">
+					<button class="button is-primary is-outlined" id="swap" type="button" onclick="swapBases(this)">Swap
+						Selected Bases</button>
+					<button class="button is-primary is-outlined" id="copy" type="button"
+						onclick="copyButton(this)">Copy Modified JSON</button>
+					<button id="reset" class="button is-warning" type="button">Undo Edits</button>
+				</div>
+				<div class="columns">
+					<div class="column" id="left">
+						<input type="text" placeholder="🔎 Search" class="input">
+						<div id="basesLeft">
+							<div class="listItem">Left</div>
+
+						</div>
+					</div>
+					<div class="column arrow right">&rarr;</div>
+					<div class="column arrow down">&darr;</div>
+					<div class="column" id="right">
+						<input type="text" placeholder="🔎 Search" class="input">
+						<div id="basesRight">
+							<div class="listItem">Right</div>
+
+						</div>
+					</div>
+				</div>
+			</div>
+		</main>
+	</div>
+</body>
+
+</html>
