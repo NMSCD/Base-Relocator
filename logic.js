@@ -84,26 +84,27 @@ function outputJSON() {
 }
 
 function copyButton(input) {
-	if (buttonPress) return;
-	const buttonText = input.innerHTML;
+	input.style.pointerEvents = 'none';
+	const buttonText = input.innerText;
 	try { outputJSON(); } catch (error) {
 		input.classList.remove('is-primary');
 		input.classList.add('is-danger');
-		input.innerHTML = 'Failed!';
+		input.innerText = 'Failed!';
 		setTimeout(() => {
 			input.classList.remove('is-danger');
 			input.classList.add('is-primary');
-			input.innerHTML = buttonText;
+			input.innerText = buttonText;
+			input.style.pointerEvents = '';
 		}, 1500);
-		console.error(error);
 		return;
 	}
 	const copyTextContent = JSON.stringify(baseData.newBases, null, '	');		// this applies formatting and uses one tab as indent character
 	navigator.clipboard.writeText(copyTextContent);
 
-	input.innerHTML = 'Copied!';
+	input.innerText = 'Copied!';
 	setTimeout(() => {
-		input.innerHTML = buttonText;
+		input.innerText = buttonText;
+		input.style.pointerEvents = '';
 	}, 1500)
 }
 
