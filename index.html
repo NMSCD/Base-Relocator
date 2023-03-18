@@ -9,6 +9,7 @@
 	<script src="./logic.js" defer></script>
 	<script>
 		window.onload = () => {
+			checkboxChange(document.getElementById('copyCheckbox').checked);
 			readJSON(document.getElementById('JSONinput'));
 		}
 	</script>
@@ -50,11 +51,15 @@
 					<button class="button is-primary is-outlined" id="copy" type="button"
 						onclick="copyButton(this)">Copy Modified JSON</button>
 					<button id="reset" class="button is-warning" type="button" onclick="reset()">Undo Edits</button>
+					<label for="copyCheckbox"><input type="checkbox" id="copyCheckbox"
+							onchange="checkboxChange(this.checked)">Copy base instead of swap</label>
 				</div>
 				<div class="columns">
-					<div class="column arrow right">
-						<div class="right">&#8644;</div>
-						<div class="down">&#8645;</div>
+					<div class="column arrow">
+						<div class="right swap">&#8644;</div>
+						<div class="down swap">&#8645;</div>
+						<div class="right copy">&rarr;</div>
+						<div class="down copy">&darr;</div>
 					</div>
 					<div class="column">
 						<div id="actionlog">
