@@ -61,7 +61,7 @@ label {
 	font-weight: bold;
 }
 
-#unicodeWarn {
+#warning {
 	display: none;
 	text-align: center;
 	margin-block-start: 5px;
