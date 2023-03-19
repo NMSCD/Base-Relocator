@@ -27,13 +27,7 @@
 					<label for="JSONinput">Copy your PersistentPlayerBases JSON section here:</label>
 					<textarea id="JSONinput" oninput="readJSON(this)" class="textarea"></textarea>
 				</div>
-				<p id="unicodeWarn">
-					Potential unicode characters detected in JSON. This could lead to basenames showing up weirdly in
-					this list and in the game.
-					<br>
-					To resolve this issue, use the NomNom save editor (linked below) to
-					copy the JSON.
-				</p>
+				<p id="warning"></p>
 				<p>
 					It is recommended to use the <a href="https://github.com/zencq/NomNom/releases" target="_blank"
 						rel="noopener noreferrer" title="NomNom save editor">NomNom save editor</a> over the Java
@@ -46,8 +40,8 @@
 			<hr>
 			<div id="output">
 				<div class="buttons">
-					<button class="button is-primary is-outlined" id="swap" type="button" onclick="swapBases(this)">Swap
-						Selected Bases</button>
+					<button class="button is-primary is-outlined" id="swap" type="button"
+						onclick="swapBases(this)"></button>
 					<button class="button is-primary is-outlined" id="copy" type="button"
 						onclick="copyButton(this)">Copy Modified JSON</button>
 					<button id="reset" class="button is-warning" type="button" onclick="reset()">Undo Edits</button>

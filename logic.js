@@ -14,21 +14,38 @@
 	Array.from(children).at(-1).insertAdjacentHTML('beforebegin', buildColumn(directions[1]));
 })();
 
-// has this structure: { bases: {}, newBases: {}, copy: Bool }
+// has this structure: { bases: {}, newBases: {}, copy: Bool, buttonText: String }
 const baseData = new Object;
 
-function readJSON(JSONInput) {
-	const JSONString = JSONInput.value;
-	const unicodeWarn = document.getElementById('unicodeWarn');
-	const isUnicodePresent = JSONString.includes('\\u');
-	unicodeWarn.style.display = isUnicodePresent ? 'block' : '';
-
-	if (!JSONString) return;
+function readJSON(jsonInput) {
+	const jsonString = jsonInput.value;
+	const isUnicodePresent = jsonString.includes('\\u');
+	warn(`Potential unicode characters detected in JSON. This could lead to basenames showing up weirdly in
+		this list and in the game.
+		<br>
+		To resolve this issue, use the NomNom save editor (linked below) to
+		copy the JSON.`, isUnicodePresent);
 	delete baseData.bases;
 	delete baseData.newBases;
-	baseData.bases = JSON.parse(JSONString);
+	try {
+		baseData.bases = JSON.parse(jsonString);
+	} catch (error) {
+		console.warn('JSON error detected: ', error)
+		if (jsonString) warn('JSON is not correctly formatted. Please make sure you copied the whole PersistentPlayerBases section.', true);
+		const baseElements = document.getElementsByClassName('bases');
+		for (const element of baseElements) {
+			element.innerHTML = '';
+		}
+		return;
+	}
 	Object.freeze(baseData.bases);		// freezing the object so we can be sure it can't been tampered with
 	listBuilder();
+}
+
+function warn(warning, show) {
+	const warnElement = document.getElementById('warning');
+	warnElement.innerHTML = warning;
+	warnElement.style.display = show ? 'block' : '';
 }
 
 function listBuilder() {
@@ -72,7 +89,6 @@ function highlightBase(element) {
 
 function swapBases(button) {
 	button.style.pointerEvents = 'none';
-	const buttonText = button.innerText;
 	const selectedElements = document.getElementsByClassName('clicked');
 	if (selectedElements.length != 2 || !selectedElements[0] || !selectedElements[1] || selectedElements[0]?.dataset?.id == selectedElements[1]?.dataset?.id) {
 		button.classList.remove('is-primary');
@@ -81,7 +97,7 @@ function swapBases(button) {
 		setTimeout(() => {
 			button.classList.remove('is-danger');
 			button.classList.add('is-primary');
-			button.innerText = buttonText;
+			button.innerText = baseData.buttonText;
 			button.style.pointerEvents = '';
 		}, 1500);
 		return;
@@ -96,14 +112,12 @@ function swapBases(button) {
 	newBases[ids[1]].Objects = oldBaseObjects;
 	if (!baseData.copy) newBases[ids[0]].Objects = newBaseObjects;
 
-	button.innerText = 'Swapped!';
-	if (baseData.copy) {
-		addToLog(`Copied "${selectedElements[0].innerText}" to "${selectedElements[1].innerText}"`);
-	} else {
-		addToLog(`Swapped "${selectedElements[0].innerText}" and "${selectedElements[1].innerText}"`);
-	}
+	const operation = baseData.copy ? 'Copied' : 'Swapped';
+	button.innerText = `${operation}!`;
+	addToLog(`${operation} "${selectedElements[0].innerText}" ${baseData.copy ? 'to' : 'and'} "${selectedElements[1].innerText}"`);
+
 	setTimeout(() => {
-		button.innerText = buttonText;
+		button.innerText = baseData.buttonText;
 		button.style.pointerEvents = '';
 	}, 1500)
 }
@@ -157,11 +171,10 @@ function addToLog(text) {
 
 function reset() {
 	if (!baseData.bases) return;
-	const baseElements = document.getElementsByClassName('bases');
+	const baseElements = document.getElementsByClassName('clicked');
 	for (const element of baseElements) {
-		element.innerHTML = '';
+		element.classList.remove('clicked');
 	}
-	listBuilder();
 	baseData.newBases = structuredClone(baseData.bases);
 	addToLog('Undid Edits');
 }
@@ -173,5 +186,6 @@ function checkboxChange(bool) {
 	wrapper.classList.toggle('swap', !bool);
 
 	const swapButton = document.getElementById('swap');
-	swapButton.innerText = bool ? 'Copy Selected Base' : 'Swap Selected Bases';
-}  
+	baseData.buttonText = bool ? 'Copy Selected Base' : 'Swap Selected Bases';
+	if (!swapButton?.style?.pointerEvents) swapButton.innerText = baseData.buttonText;
+}
