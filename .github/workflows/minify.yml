@@ -22,8 +22,10 @@ jobs:
       - name: Checkout 🛎️
         uses: actions/checkout@v3
 
-      - name: Minify Action
-        uses: anthonyftwang/minify-action@v1.0.1
+      - name: Minify Code
+        uses: Lenni009/minify-js@main
+        with:
+          overwrite: true
 
       - run: |
           touch .nojekyll
