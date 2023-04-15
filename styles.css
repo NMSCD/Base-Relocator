@@ -50,6 +50,10 @@ hr {
 	display: none;
 }
 
+.bases>:hover {
+	filter: brightness(1.1);
+}
+
 /* #output:has(#bases:empty) button {
 	visibility: hidden;
 }
