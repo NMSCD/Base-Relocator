@@ -19,6 +19,12 @@ const baseData = new Object;
 
 function readJSON(jsonInput) {
 	const jsonString = jsonInput.value;
+	const isUnicodePresent = jsonString.includes('\\u');
+	warn(`Potential unicode characters detected in JSON. This could lead to basenames showing up weirdly in
+		this list and in the game.
+		<br>
+		To resolve this issue, use the NomNom save editor (linked below) to
+		copy the JSON.`, isUnicodePresent);
 	delete baseData.bases;
 	delete baseData.newBases;
 	try {
@@ -32,13 +38,6 @@ function readJSON(jsonInput) {
 		}
 		return;
 	}
-	const jsonText = JSON.stringify(baseData.bases);
-	const isUnicodePresent = jsonString != jsonText;
-	warn(`Potential unicode characters detected in JSON. This could lead to basenames showing up weirdly in
-	this list and in the game.
-	<br>
-		To resolve this issue, use the NomNom save editor (linked below) to
-		copy the JSON.`, isUnicodePresent);
 	Object.freeze(baseData.bases);		// freezing the object so we can be sure it can't been tampered with
 	listBuilder();
 }
