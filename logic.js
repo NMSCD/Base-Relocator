@@ -19,19 +19,15 @@ const baseData = new Object;
 
 function readJSON(jsonInput) {
 	const jsonString = jsonInput.value;
-	const isUnicodePresent = jsonString.includes('\\u');
-	warn(`Potential unicode characters detected in JSON. This could lead to basenames showing up weirdly in
-		this list and in the game.
-		<br>
-		To resolve this issue, use the NomNom save editor (linked below) to
-		copy the JSON.`, isUnicodePresent);
 	delete baseData.bases;
 	delete baseData.newBases;
 	try {
 		baseData.bases = JSON.parse(jsonString);
 	} catch (error) {
-		console.warn('JSON error detected: ', error)
-		if (jsonString) warn('JSON is not correctly formatted. Please make sure you copied the whole PersistentPlayerBases section.', true);
+		if (jsonString) {
+			console.warn('JSON error detected: ', error)
+			warn('JSON is not correctly formatted. Please make sure you copied the whole PersistentPlayerBases section.', true);
+		}
 		const baseElements = document.getElementsByClassName('bases');
 		for (const element of baseElements) {
 			element.innerHTML = '';
