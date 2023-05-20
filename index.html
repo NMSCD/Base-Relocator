@@ -5,39 +5,35 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Base Relocator</title>
-	<link rel="stylesheet" href="./styles.css">
-	<script src="./logic.js" defer></script>
-	<script>
-		window.onload = () => {
-			checkboxChange(document.getElementById('copyCheckbox').checked);
-			readJSON(document.getElementById('JSONinput'));
-		}
-	</script>
+	<script src="./src/main.ts" type="module"></script>
 </head>
 
 <body>
 	<div class="container">
-		<nav>
-			<a href=".." title="Other pages">&larr; View other pages</a>
-		</nav>
-		<main>
+		<header>
+			<nav>
+				<a href=".." title="Other pages">&larr; View other pages</a>
+			</nav>
 			<h1 class="title is-3">Base Relocator</h1>
-			<div id="input">
+		</header>
+		<main>
+			<section id="input">
 				<div>
 					<label for="JSONinput">Copy your PersistentPlayerBases JSON section here:</label>
-					<textarea id="JSONinput" oninput="readJSON(this)" class="textarea"></textarea>
+					<textarea id="JSONinput" class="textarea"></textarea>
 				</div>
-			</div>
+				<p id="warning"></p>
+			</section>
 			<hr>
-			<div id="output">
+			<section id="output">
 				<div class="buttons">
-					<button class="button is-primary is-outlined" id="swap" type="button"
-						onclick="swapBases(this)"></button>
-					<button class="button is-primary is-outlined" id="copy" type="button"
-						onclick="copyButton(this)">Copy Modified JSON</button>
-					<button id="reset" class="button is-warning" type="button" onclick="reset()">Undo Edits</button>
-					<label for="copyCheckbox"><input type="checkbox" id="copyCheckbox"
-							onchange="checkboxChange(this.checked)">Copy base instead of swap</label>
+					<button class="button is-primary is-outlined" id="swap" type="button"></button>
+					<button class="button is-primary is-outlined" id="copy" type="button">Copy Modified JSON</button>
+					<button id="reset" class="button is-warning" type="button">Undo Edits</button>
+					<label for="copyCheckbox">
+						<input type="checkbox" id="copyCheckbox">
+						<span>Copy base instead of swap</span>
+					</label>
 				</div>
 				<div class="columns">
 					<div class="column arrow">
@@ -52,7 +48,7 @@
 						</div>
 					</div>
 				</div>
-			</div>
+			</section>
 		</main>
 	</div>
 </body>
