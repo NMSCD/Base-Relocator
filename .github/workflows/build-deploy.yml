@@ -1,6 +1,6 @@
-name: Minify
+name: Build
 
-run-name: Minify Code
+run-name: Build Code
 
 on:
   push:
@@ -10,20 +10,20 @@ permissions:
   contents: write
 
 concurrency:
-  group: "minify"
+  group: "build"
   cancel-in-progress: true
 
 jobs:
   build:
-    environment: github-pages
     runs-on: ubuntu-latest
     
     steps:
       - name: Checkout 🛎️
         uses: actions/checkout@v3
 
-      - run: |
-          npm i
+      - name: Build
+        run: |
+          npm ci
           npm run build
           cd dist
           touch .nojekyll
