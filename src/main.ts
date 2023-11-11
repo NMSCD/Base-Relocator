@@ -135,10 +135,16 @@ function highlightBase(element: ListItem) {
 function swapBases(button: HTMLButtonElement) {
 	button.style.pointerEvents = 'none';
 	const selectedElements = Array.from(document.getElementsByClassName('clicked')) as Array<HTMLElement>;
-	if (selectedElements.length != 2 || !selectedElements[0] || !selectedElements[1] || selectedElements[0]?.dataset?.id == selectedElements[1]?.dataset?.id) {
+	if (selectedElements.length !== 2 || !selectedElements[0] || !selectedElements[1] || selectedElements[0]?.dataset?.id === selectedElements[1]?.dataset?.id) {
 		button.classList.remove('is-primary');
 		button.classList.add('is-danger');
-		button.innerText = 'Failed!';
+		if (selectedElements.length !== 2) {
+			button.innerText = 'Must select 2 bases!';
+		} else if (!selectedElements[0] || !selectedElements[1] || selectedElements[0]?.dataset?.id === selectedElements[1]?.dataset?.id) {
+			button.innerText = "Same base selected twice!";
+		} else {
+			button.innerText = 'Failed! (unknown cause)';
+		}
 		setTimeout(() => {
 			button.classList.remove('is-danger');
 			button.classList.add('is-primary');
@@ -175,7 +181,7 @@ function copyButton(button: HTMLButtonElement) {
 	if (!baseData.newBases) {
 		button.classList.remove('is-primary');
 		button.classList.add('is-danger');
-		button.innerText = 'Failed!';
+		button.innerText = 'No changes to copy!';
 		setTimeout(() => {
 			button.classList.remove('is-danger');
 			button.classList.add('is-primary');
