@@ -97,6 +97,7 @@ function listBuilder() {
 	const listItems: Array<HTMLElement> = [];
 	for (let i = 0; i < bases.length; i++) {
 		const base = bases[i];
+		if (base.BaseType.PersistentBaseTypes === 'ExternalPlanetBase') continue;
 		const id = i;
 		const name = base.Name;
 		const listItem = buildListItem(id, name);
