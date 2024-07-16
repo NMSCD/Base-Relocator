@@ -1,0 +1,118 @@
+:root {
+  --link-hover: #363636;
+  --base-background: hsl(0, 0%, 90%);
+  --base-hover: hsl(0, 0%, 77%);
+  --card-colour: black;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --link-hover: #c9c9c9;
+    --base-background: hsl(0, 0%, 20%);
+    --base-hover: hsl(0, 0%, 33%);
+    --card-colour: white;
+  }
+}
+
+a:hover {
+  color: var(--link-hover);
+}
+
+@media only screen and (max-width: 1023px) {
+  .container {
+    margin-inline: 1rem;
+  }
+}
+
+.bases {
+  & > div {
+    padding: 1rem;
+    margin-block: 0.3rem;
+    border-radius: 5px;
+    cursor: pointer;
+    -webkit-user-select: none;
+    user-select: none;
+    background-color: var(--base-background);
+    color: var(--card-colour);
+
+    &.clicked {
+      background-color: lightgreen;
+      color: black;
+    }
+  }
+
+  & > span {
+    display: none;
+  }
+
+  & > :hover {
+    background-color: var(--base-hover);
+  }
+}
+
+label {
+  display: block;
+  margin-block-end: 0.25rem;
+  font-weight: bold;
+
+  &:has(input[type='checkbox']) {
+    font-weight: normal;
+    margin-inline-start: 10px;
+  }
+
+  & > input[type='checkbox'] {
+    margin-inline-end: 3px;
+    vertical-align: baseline;
+  }
+}
+
+.arrow {
+  font-weight: bold;
+  font-size: 3rem;
+  text-align: center;
+  max-width: 10%;
+
+  & > .right {
+    position: sticky;
+    top: calc(50dvh - 2rem);
+    margin-block-start: 5rem;
+  }
+
+  & > .down,
+  &.copy > .swap,
+  &.swap > .copy {
+    display: none;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .arrow > .right {
+    display: none;
+  }
+
+  .arrow > .down {
+    display: unset;
+  }
+
+  .arrow {
+    display: flex;
+    place-items: center;
+    justify-content: center;
+    min-width: 100%;
+  }
+}
+
+.buttons,
+#actionlog {
+  position: sticky;
+  padding-block-start: 1rem;
+  padding-block-end: 0.5rem;
+  top: 0;
+  z-index: 2;
+  background-color: var(--bulma-scheme-main);
+}
+
+#actionlog {
+  z-index: 3;
+  top: 0.7rem;
+}
