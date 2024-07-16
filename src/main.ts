@@ -1,6 +1,7 @@
 import 'bulma';
 import './styles.css';
 
+const outlinedClassName = 'is-outlined';
 const timeoutDuration = 1500;
 
 const baseData: {
@@ -30,7 +31,7 @@ const baseData: {
 
     searchInput.type = 'text';
     searchInput.placeholder = '🔎 Search';
-    searchInput.classList.add('input');
+    searchInput.classList.add('input', 'my-4');
     searchInput.addEventListener('input', function () {
       filterList(this as unknown as HTMLInputElement);
     });
@@ -190,12 +191,14 @@ function swapBases(button: HTMLButtonElement) {
   baseData.newBases = JSON.stringify(newBases);
 
   const operation = baseData.copy ? 'Copied' : 'Swapped';
+  button.classList.remove(outlinedClassName);
   button.innerText = `${operation}!`;
   addToLog(
     `${operation} "${selectedElements[0].innerText}" ${baseData.copy ? 'to' : 'and'} "${selectedElements[1].innerText}"`
   );
 
   setTimeout(() => {
+    button.classList.add(outlinedClassName);
     button.innerText = baseData.buttonText as string;
     button.style.pointerEvents = '';
   }, timeoutDuration);
@@ -219,9 +222,11 @@ function copyButton(button: HTMLButtonElement) {
   const baseJson = JSON.parse(baseData.newBases);
   const copyTextContent = JSON.stringify(baseJson, null, '\t'); // NoSonar this applies formatting and uses one tab as indent character
   navigator.clipboard.writeText(copyTextContent);
+  button.classList.remove(outlinedClassName);
   button.innerText = 'Copied!';
 
   setTimeout(() => {
+    button.classList.add(outlinedClassName);
     button.innerText = buttonText;
     button.style.pointerEvents = '';
   }, timeoutDuration);
@@ -246,7 +251,7 @@ function addToLog(text: string) {
   const logElement = document.getElementById('actionlog');
   const div = document.createElement('div');
   div.innerText = text;
-  div.classList.add('logItem');
+  div.classList.add('log-item', 'my-2');
   logElement?.appendChild(div);
 }
 
