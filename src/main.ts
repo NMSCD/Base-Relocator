@@ -1,5 +1,5 @@
 import 'bulma';
-import './styles.scss';
+import './styles.css';
 
 const baseData: {
 	bases?: string;
