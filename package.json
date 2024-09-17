@@ -13,7 +13,7 @@
     "@types/node": "^20.14.10",
     "prettier": "^3.3.3",
     "typescript": "^5.5.3",
-    "vite": "^5.3.4"
+    "vite": "^5.3.6"
   },
   "dependencies": {
     "bulma": "^1.0.1"
