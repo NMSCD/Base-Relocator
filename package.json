@@ -17,6 +17,6 @@
     "vite": "^6.0.6"
   },
   "dependencies": {
-    "bulma": "^1.0.2"
+    "bulma": "^1.0.3"
   }
 }
