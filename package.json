@@ -11,7 +11,7 @@
   },
   "devDependencies": {
     "@types/node": "^22.13.5",
-    "prettier": "^3.5.1",
+    "prettier": "^3.5.2",
     "sass-embedded": "^1.85.0",
     "typescript": "^5.7.3",
     "vite": "^6.1.1"
