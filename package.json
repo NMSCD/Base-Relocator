@@ -10,11 +10,11 @@
     "format": "prettier --write src/"
   },
   "devDependencies": {
-    "@types/node": "^22.14.1",
+    "@types/node": "^22.15.19",
     "prettier": "^3.5.3",
-    "sass-embedded": "^1.86.3",
+    "sass-embedded": "^1.89.0",
     "typescript": "^5.8.3",
-    "vite": "^6.2.6"
+    "vite": "^6.3.5"
   },
   "dependencies": {
     "bulma": "^1.0.3"
