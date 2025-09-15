@@ -14,7 +14,7 @@
     "prettier": "^3.6.2",
     "sass-embedded": "^1.92.1",
     "typescript": "^5.9.2",
-    "vite": "^7.1.4"
+    "vite": "^7.1.5"
   },
   "dependencies": {
     "bulma": "^1.0.3"
