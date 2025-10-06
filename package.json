@@ -13,7 +13,7 @@
     "@types/node": "^24.5.2",
     "prettier": "^3.6.2",
     "sass-embedded": "^1.93.2",
-    "typescript": "^5.9.2",
+    "typescript": "^5.9.3",
     "vite": "^7.1.7"
   },
   "dependencies": {
