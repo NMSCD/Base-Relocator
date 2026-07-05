@@ -10,7 +10,7 @@
     "format": "prettier --write src/"
   },
   "devDependencies": {
-    "@types/node": "^26.0.0",
+    "@types/node": "^26.1.0",
     "prettier": "^3.9.1",
     "sass-embedded": "^1.100.0",
     "typescript": "^5.9.3",
